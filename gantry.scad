@@ -1,4 +1,5 @@
 include <BOSL2/std.scad>
+include <modeled_points.txt>
 
 res = 50;
 
@@ -7,23 +8,7 @@ res = 50;
 //    each left(50, p=arc(d=100,angle=[0,-90])),
 //];
 
-//path = [[0,0],[3,4],[5,6]];
-//
-//path_extrude2d(path,caps=false) {
-//    //fwd(2.5) square([5,6],center=true);
-//    cross_section();
-//}
-
-path = [[ 0, 0, 0],
-		[10, 0, 2],[20, 0, 4],[30, 0, 7],[40, 0,15],[47, 0,25],
-		[50, 0,35],[52, 0,45],[55, 0,55],[56, 0,65],[56, 0,75],
-		[54, 0,85],[53, 0,95],[51, 0,105],[49, 0,115],[45, 0,125],
-		[42, 0,135],[38, 0,145],[35, 0,155],[30, 0,164],[24, 0,172],
-		[19, 0,180],[15, 0,185],[10, 0,190]];
-        
-newpath = subdivide_path(path, refine=3, [closed=false]);
-
-path_extrude(newpath) cross_section();
+path_extrude(path) cross_section();
 
 //translate([0,0,46+160])
 //rotate([90,0,0])
