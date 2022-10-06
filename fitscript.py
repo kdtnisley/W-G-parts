@@ -26,3 +26,6 @@ ax.scatter(xzpoints, yzpoints, zpoints, zdir='z', c= 'red')
 
 for i in zpoints:
     print('[', xzpoints[i], ',', yzpoints[i], ',', zpoints[i], ']',',')
+    
+#for i in np.arange(0,24,1):
+#    print('[', data[i,0], ',', data[i,1], ',', data[i,2], ']',',')

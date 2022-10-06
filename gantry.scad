@@ -1,34 +1,103 @@
 include <BOSL2/std.scad>
 include <modeled_points.txt>
 
+r_top = 45;
+
+difference(){
+union(){
+gantry();
+translate([0,r_top*2,0])
+mirror([0, 1, 0])
+gantry();
+
+//bearing superstructure
+translate([0,r_top,vert/2 + r_top])
+rotate([90,0,90])
+rotate_extrude(convexity = 10,$fn=50)
+translate([5, 0, 0])
+cross_section();
+}
+
+vert = 26*5+20;
+translate([0,r_top,vert/2 + r_top])
+rotate([90,0,90])
+cylinder(20,4,4,$fn=50,center=true); //shaft hole
+}
+
+
+
+module gantry(){
 res = 50;
 
-//path = [
-//    each right(50, p=arc(d=100,angle=[90,180])),
-//    each left(50, p=arc(d=100,angle=[0,-90])),
-//];
+r_top = 45;
+r_foot = 50;
+r_heel = 15;
+vert = 26*5+20; //wanted it another 2cm taller
 
-path_extrude(path) cross_section();
+union(){
+linear_extrude(vert,center=true,convexity=10,twist=0,slices=20,scale=1,$fn=res)
+cross_section();
 
-//translate([0,0,46+160])
-//rotate([90,0,0])
-//difference(){
-//union(){
-////bearing superstructure
-//rotate_extrude(convexity = 10,$fn=50)
-//translate([11, 0, 0])
-//cross_section();
-//
-//rotate_extrude(convexity = 10,$fn=50)
-//translate([5, 0, 0])
-//cross_section();
-//}
-//
-//cylinder(20,4,4,$fn=50,center=true); //shaft hole
-//}
+//top
+translate([0,r_top-10,vert/2 + r_top-5-1.1])
+rotate([0,-90,0])
+rotate([0,0,-20])
+finial();
 
-//linear_extrude(20,center=true,convexity=10,0,slices = 20,scale = 1,$fn=res)
-//cross_section();
+translate([0,r_top,vert/2])
+rotate([90,0,0])
+rotate([0,-90,0])
+rotate_extrude(angle = 70, convexity = 10,$fn=50)
+translate([r_top, 0, 0])
+cross_section();
+
+//foot
+translate([r_foot,0,-vert/2+35])
+rotate([90,180,0])
+rotate_extrude(angle = 90,convexity = 10,$fn=50)
+translate([r_foot, 0, 0])
+cross_section();
+
+translate([r_foot,5,-vert/2-r_heel])
+rotate([0,0,-90])
+finial();
+
+//heel
+translate([0,-r_heel,-vert/2])
+rotate([0,-90,0])
+rotate([0,0,90])
+rotate_extrude(angle = 90,convexity = 10,$fn=50)
+translate([r_heel, 0, 0])
+cross_section();
+
+translate([5,-r_heel-5,-vert/2-r_heel])
+mirror([1,0,0])
+rotate([0,0,90])
+finial();
+}}
+
+module finial(){
+    res = 50;
+    r = 5;
+    union(){
+    rotate_extrude(angle = 270,convexity = 10,$fn=50)
+translate([r, 0, 0])
+cross_section();
+
+translate([r,-r/2,0])
+rotate([90,0,0])
+linear_extrude(r,center=true,convexity=10,twist=0,slices=20,scale=1,$fn=res)
+cross_section();
+
+translate([r/2,-r,0])
+rotate([90,0,90])
+linear_extrude(r,center=true,convexity=10,twist=0,slices=20,scale=1,$fn=res)
+cross_section();
+
+}}
+
+
+
 
 module cross_section_cap(){
     cs_width = 10;
