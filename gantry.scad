@@ -2,6 +2,11 @@ include <BOSL2/std.scad>
 include <modeled_points.txt>
 
 r_top = 45;
+vert = 26*5+20;
+r_foot = 50;
+r_heel = 15;
+rs = 2; //screw size
+f = 7.5;
 
 difference(){
 union(){
@@ -14,20 +19,44 @@ gantry();
 translate([0,r_top,vert/2 + r_top])
 rotate([90,0,90])
 rotate_extrude(convexity = 10,$fn=50)
-translate([5, 0, 0])
+translate([f, 0, 0])
 cross_section();
-}
 
-vert = 26*5+20;
-translate([0,r_top,vert/2 + r_top])
+translate([-f,r_top,vert/2 + r_top])
 rotate([90,0,90])
-cylinder(20,4,4,$fn=50,center=true); //shaft hole
+cylinder(30,10.3,10.3,$fn=50);
+    
+
 }
 
+translate([5,r_top,vert/2 + r_top])
+rotate([90,0,90])
+cylinder(50,4,4,$fn=50,center=true); //shaft hole
 
+//foot holes
+translate([r_foot,f,-vert/2-f*2])
+rotate([0,0,90])
+cylinder(10,rs,rs,$fn=50,center=true);
+
+translate([f,-r_heel-f,-vert/2-f*2])
+rotate([0,0,90])
+cylinder(10,rs,rs,$fn=50,center=true);
+
+translate([r_foot,r_top*2-f,-vert/2-f*2])
+rotate([0,0,90])
+cylinder(10,rs,rs,$fn=50,center=true);
+
+translate([f,r_top*2+r_heel+f,-vert/2-f*2])
+rotate([0,0,90])
+cylinder(10,rs,rs,$fn=50,center=true);
+
+//baseplate
+translate([-r_heel*2-10,-r_heel*2-10,-vert/2-r_foot/2-2])
+cube([170,170,10]);
+}
 
 module gantry(){
-res = 50;
+res = 100;
 
 r_top = 45;
 r_foot = 50;
@@ -39,26 +68,26 @@ linear_extrude(vert,center=true,convexity=10,twist=0,slices=20,scale=1,$fn=res)
 cross_section();
 
 //top
-translate([0,r_top-10,vert/2 + r_top-5-1.1])
+translate([0,r_top-10,vert/2 + r_top-f-1.2])
 rotate([0,-90,0])
-rotate([0,0,-20])
+rotate([0,0,-22])
 finial();
 
 translate([0,r_top,vert/2])
 rotate([90,0,0])
 rotate([0,-90,0])
-rotate_extrude(angle = 70, convexity = 10,$fn=50)
+rotate_extrude(angle = 70, convexity = 10,$fn=res)
 translate([r_top, 0, 0])
 cross_section();
 
 //foot
 translate([r_foot,0,-vert/2+35])
 rotate([90,180,0])
-rotate_extrude(angle = 90,convexity = 10,$fn=50)
+rotate_extrude(angle = 90,convexity = 10,$fn=res)
 translate([r_foot, 0, 0])
 cross_section();
 
-translate([r_foot,5,-vert/2-r_heel])
+translate([r_foot,f,-vert/2-r_heel])
 rotate([0,0,-90])
 finial();
 
@@ -66,11 +95,11 @@ finial();
 translate([0,-r_heel,-vert/2])
 rotate([0,-90,0])
 rotate([0,0,90])
-rotate_extrude(angle = 90,convexity = 10,$fn=50)
+rotate_extrude(angle = 90,convexity = 10,$fn=res)
 translate([r_heel, 0, 0])
 cross_section();
 
-translate([5,-r_heel-5,-vert/2-r_heel])
+translate([f,-r_heel-f,-vert/2-r_heel])
 mirror([1,0,0])
 rotate([0,0,90])
 finial();
@@ -78,7 +107,7 @@ finial();
 
 module finial(){
     res = 50;
-    r = 5;
+    r = 7.5;
     union(){
     rotate_extrude(angle = 270,convexity = 10,$fn=50)
 translate([r, 0, 0])
@@ -125,7 +154,7 @@ module cross_section_cap(){
 }
 
 module cross_section(){
-    cs_width = 10;
+    cs_width = 15;
     cs_r = cs_width/4 + 1; 
     cs_res = 25;
     t = true;
