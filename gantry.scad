@@ -1,12 +1,14 @@
 include <BOSL2/std.scad>
 include <modeled_points.txt>
 
-r_top = 45;
-vert = 26*5+20;
+r_top = 55;
+vert = 24*5;
 r_foot = 50;
 r_heel = 15;
-rs = 2; //screw size
+rs = 2.3; //screw size
 f = 7.5;
+
+
 
 difference(){
 union(){
@@ -24,7 +26,7 @@ cross_section();
 
 translate([-f,r_top,vert/2 + r_top])
 rotate([90,0,90])
-cylinder(30,10.3,10.3,$fn=50);
+cylinder(30-3,10.3,10.3,$fn=50);
     
 
 }
@@ -33,42 +35,52 @@ translate([5,r_top,vert/2 + r_top])
 rotate([90,0,90])
 cylinder(50,4,4,$fn=50,center=true); //shaft hole
 
+translate([-f,r_top,vert/2 + r_top])
+rotate([90,0,90])
+cylinder(6.3,7.6,7.6,$fn=6); //nut socket
+
 //foot holes
-translate([r_foot,f,-vert/2-f*2])
+translate([r_foot,f,-vert/2-f-5])
 rotate([0,0,90])
 cylinder(10,rs,rs,$fn=50,center=true);
 
-translate([f,-r_heel-f,-vert/2-f*2])
+translate([f,-r_heel-f,-vert/2-f-5])
 rotate([0,0,90])
 cylinder(10,rs,rs,$fn=50,center=true);
 
-translate([r_foot,r_top*2-f,-vert/2-f*2])
+translate([r_foot,r_top*2-f,-vert/2-f-5])
 rotate([0,0,90])
 cylinder(10,rs,rs,$fn=50,center=true);
 
-translate([f,r_top*2+r_heel+f,-vert/2-f*2])
+translate([f,r_top*2+r_heel+f,-vert/2-f-5])
 rotate([0,0,90])
 cylinder(10,rs,rs,$fn=50,center=true);
 
 //baseplate
-translate([-r_heel*2-10,-r_heel*2-10,-vert/2-r_foot/2-2])
-cube([170,170,10]);
+translate([-r_heel*2-20,-r_heel*2-20,-vert/2-25])
+cube([200,200,10]);
+
+translate([-f,50,0])
+cube([10,200,300],center=true);
+translate([33,50,0])
+cube([70,200,300],center=true);
 }
+
 
 module gantry(){
 res = 100;
 
-r_top = 45;
+r_top = 55;
 r_foot = 50;
 r_heel = 15;
-vert = 26*5+20; //wanted it another 2cm taller
+vert = 24*5;
 
 union(){
 linear_extrude(vert,center=true,convexity=10,twist=0,slices=20,scale=1,$fn=res)
 cross_section();
 
 //top
-translate([0,r_top-10,vert/2 + r_top-f-1.2])
+translate([0,r_top-10,vert/2 + r_top-f-.4])
 rotate([0,-90,0])
 rotate([0,0,-22])
 finial();
