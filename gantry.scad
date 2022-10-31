@@ -23,7 +23,7 @@ path_extrude(path) cross(dia,res);
 translate([-dia*.65,3,height-dia/3-4])
 cube([dia*1.3,12,dia/2-1]);
 
-translate([0,10.25,height]) rotate([90,0,0])
+translate([0,10.3,height]) rotate([90,0,0])
 cylinder(dia,6.5,6.5,$fn=50,center=true);
 
 //foot
