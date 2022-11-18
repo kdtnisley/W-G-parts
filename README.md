@@ -7,12 +7,13 @@ A repo to contain the OpenScad code for Willcox & Gibbs chain stitch sewing mach
 - hand wheel: hand wheel
 - spool holder: replaces the spool holder
 - spool holder pin: holds the spool pin in place
+- base clips: replaces the central bolt underneath with as many clips that go around the edge as you want
 
 ## Unprintable Parts
 - M8 machine bolt, 2 washers, and nut
 - skateboard bearing
 - drive belt (I cut one to size from a Singer leather belt)
-- 4 x #8 wood screws (1/2 or 3/4 inch)
+- at least 4 x #8 wood screws (1/2 or 3/4 inch)
 - plank or board to put it on
 
 ## Ancillary Files
@@ -26,3 +27,4 @@ A repo to contain the OpenScad code for Willcox & Gibbs chain stitch sewing mach
 - improve fit of drive wheel adapter
 - clean up files so that they all use the ShapesNPaths library
 - add constants file
+- figure out what happened to the hand wheel code????
