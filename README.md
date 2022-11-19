@@ -1,19 +1,23 @@
 # W-G-parts
 A repo to contain the OpenScad code for Willcox & Gibbs chain stitch sewing machine
+Thingiverse to get the STLs: https://www.thingiverse.com/thing:5639753
+The Thingiverse may be behind this repo.
 
 ## Printable Parts
 - drive wheel adapter: fits around the drive wheel and moves the belt channel from the machine side to the outside. Part presses into place with a snap and is friction fit.
 - gantry: holds the axle for the hand wheel in position above the drive wheel
 - hand wheel: hand wheel
+- hand crank: hand crank
 - spool holder: replaces the spool holder
 - spool holder pin: holds the spool pin in place
 - base clips: replaces the central bolt underneath with as many clips that go around the edge as you want
 
 ## Unprintable Parts
-- M8 machine bolt, 2 washers, and nut
+- M8 machine bolt (1.25 inches long), 2-3 washers, and nut
+- (size) by (size) bolt for crank handle
 - skateboard bearing
 - drive belt (I cut one to size from a Singer leather belt)
-- at least 4 x #8 wood screws (1/2 or 3/4 inch)
+- at least 4 x #8 wood screws (1/2 or 3/4 inch long) + as many as you need for the base clips
 - plank or board to put it on
 
 ## Ancillary Files
@@ -25,6 +29,8 @@ A repo to contain the OpenScad code for Willcox & Gibbs chain stitch sewing mach
 
 ### TODO
 - improve fit of drive wheel adapter
-- clean up files so that they all use the ShapesNPaths library
 - add constants file
-- figure out what happened to the hand wheel code????
+- finish hand wheel code
+
+## Wishlist
+- american geared hand crank version

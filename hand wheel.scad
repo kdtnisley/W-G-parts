@@ -9,8 +9,8 @@ belt_channel_rad = 175/2;
 rim_width = 17;
 rim_depth = 12;
 
-
-
+difference(){
+union(){
 //wheel rim
 rotate_extrude(convexity = 10,$fn=res)
 translate([belt_channel_rad, 0, 0])
@@ -34,9 +34,28 @@ cross(10,res);
 
 //spokes
 spoke(belt_channel_rad,res);
+}
+
+//subtractable regions//
+//bearing
+translate([0,0,4])
+cylinder(h = 8, d = 22, center = true, $fn=res);
+
+//axel shaft/bolt hole
+cylinder(h = 20, d = 8, center = true, $fn=res);
+
+//hole for hand crank bolt
+translate([0,-belt_channel_rad + 25.5,-2])
+rotate([0,0,90])
+cylinder(h = 8, r = 1.5, center = true, $fn = res);
+
+//washer hole/clearance
+translate([0,0,-5])
+cylinder(h = 1, d = 17, center = true, $fn=res);
+}
 
 
-
+//Modules//
 
 module spoke(length,res)
 {

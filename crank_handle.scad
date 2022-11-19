@@ -27,11 +27,12 @@ translate([9.5, 0, 0])
 circle(1.25,$fn=res);
 }
 
-
-translate([30,0,0])
+//screw
+translate([32,0,0])
 rotate([0,90,0])
-screw_hole("#8,1.375",head="pan",counterbore=36,$fn=res);
+screw_hole("#8,1.5",head="pan",counterbore=36,$fn=res);
 
+//screwdriver clearance
 translate([47,0,0])
 rotate([0,90,0])
 cylinder(h=36,d=10,center=true,$fn=res);
