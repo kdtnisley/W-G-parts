@@ -10,7 +10,7 @@ union(){
 rotate([90,0,0])
 cylinder(pin_OD*2, wall, wall, $fn=res, center=true);
 
-translate([0,pin_OD+ID,0])
+translate([0,pin_OD+ID-1,0])
 scale([2,1.5,.5])
 sphere(pin_OD, $fn=res);
 

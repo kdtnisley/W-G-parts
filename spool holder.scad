@@ -25,7 +25,7 @@ cylinder(wall, ID/2, ID/2, center=true);
 
 
 //pin
-pin_OD = 5.5; //mm
+pin_OD = 5; //mm
 pin_len = 55 + 15 + 5; //spool height + holder + fudge
 
 difference(){
