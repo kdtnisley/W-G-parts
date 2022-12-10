@@ -2,7 +2,7 @@ include <BOSL2/std.scad>
 include <BOSL2/distributors.scad>
 include <ShapesNPaths/crossSections_n_caps.scad>
 
-belt_rad = 3;
+belt_rad = 3.5;
 res = 50;
 
 belt_channel_rad = 175/2;

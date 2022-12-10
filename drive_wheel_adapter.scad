@@ -77,7 +77,7 @@ rotate([0,0,25]) translate([0,IR+w/2,0]) circle(r = w/2, $fn=res);
 
 translate([IR,-IRot+1,0]) square([w,IRot-1]);
 
-translate([IR+.25,-IR/2,0]) rotate([0,0,-90]) belt_channel(belt_rad);
+translate([IR+.25,-IR/2,0]) rotate([0,0,-90]) belt_channel(belt_rad,res);
 
 translate([IR+w,-IR*2-1,0])
 difference(){
