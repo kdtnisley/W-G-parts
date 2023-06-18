@@ -4,12 +4,12 @@ Thingiverse to get the STLs: https://www.thingiverse.com/thing:5639753
 The Thingiverse may be behind this repo.
 
 ## Printable Parts
-- drive wheel adapter: fits around the drive wheel and moves the belt channel from the machine side to the outside. Part presses into place with a snap and is friction fit.
+- drive wheel adapter: fits around the drive wheel and moves the belt channel from the machine side to the outside. Part presses into place with a snap and is friction fit. Fit may be improved by placing small dots of caulk on the insides of the flanges and a small bead of caulk around where the flanges meet the back.
 - gantry: holds the axle for the hand wheel in position above the drive wheel
 - hand wheel: hand wheel
 - hand crank: hand crank
 - spool holder: replaces the spool holder
-- spool holder pin: holds the spool pin in place
+- spool holder pin: holds the spool holder in place
 - base clips: replaces the central bolt underneath with as many clips that go around the edge as you want
 
 ## Unprintable Parts

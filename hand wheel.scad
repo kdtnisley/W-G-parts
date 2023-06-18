@@ -3,7 +3,7 @@ include <BOSL2/distributors.scad>
 include <ShapesNPaths/crossSections_n_caps.scad>
 
 belt_rad = 3.5;
-res = 50;
+res = 100;
 
 belt_channel_rad = 175/2;
 rim_width = 17;
@@ -19,7 +19,7 @@ rect([rim_depth,rim_width], rounding=[2,0,2,2]);
 //belt channel
 translate([0,0,rim_width/2-1.5])
 rotate_extrude(convexity = 10,$fn=res)
-translate([-belt_channel_rad+1.5, 0, 0])
+translate([-belt_channel_rad+0.75, 0, 0])
 belt_channel(belt_rad, res);
 
 
@@ -42,16 +42,16 @@ translate([0,0,4])
 cylinder(h = 8, d = 22, center = true, $fn=res);
 
 //axel shaft/bolt hole
-cylinder(h = 20, d = 8, center = true, $fn=res);
+cylinder(h = 20, d = 9, center = true, $fn=res);
 
 //hole for hand crank bolt
 translate([0,-belt_channel_rad + 25.5,-2])
 rotate([0,0,90])
-cylinder(h = 8, r = 1.5, center = true, $fn = res);
+cylinder(h = 8, r = 2, center = true, $fn = res);
 
 //washer hole/clearance
-translate([0,0,-5])
-cylinder(h = 1, d = 17, center = true, $fn=res);
+translate([0,0,-4.5])
+cylinder(h = 2, d = 18, center = true, $fn=res);
 }
 
 
