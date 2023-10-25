@@ -14,7 +14,7 @@ t_dw = 10; //distance from center of belt race edge of wheel
 
 //hand wheel info
 gap_hw = 15; //space between bottom of hw and top of dw
-r_hw = 50;   //radius of hw
+r_hw = 75;   //radius of hw
 h_hw = gap_dw + 2*r_dw + gap_hw + r_dw; //height of center of hw from mounting plate
 
 //gantry profile info
@@ -32,25 +32,64 @@ adj_min = [r_hw + r_maj + clearance, 0, h_dw];
 anchor = [0,-(t_dw + clearance),0];
 
 //left & right anchor points (center of screw hole)
-anchor_lr = [adj_min, 0 , 0]; //might need more x
+anchor_lr = [r_hw + r_maj + clearance, 0 , 0]; //might need more x
 
 
 //ASSEMBLY_____________________________________________
-path = arc(r=r_hw + r_maj + clearance, angle=90);
-new_path = hstack(path,column(path,1));
-echo(new_path);
-stroke(new_path, dots=true, dots_color="blue");
+//extrude_from_to(anchor_lr, adj_min, convexity=4, twist=90, slices=40) {
+//    ellipse([3, 6], $fn=32);
+//}
+
+hw_spoke(r_hw);
+
+
+//hand_wheel(r_hw);
 
 
 //MODULES______________________________________________
 module hand_wheel(r_hw){
+    union(){
+    //r_hw needs to be the outside extent of the wheel
+    //chunky round wheel with belt race affixed to it
+    r_chunk = 15;
+    path = ellipse(r=r_hw-r_chunk/2);
+    path_extrude2d(path,closed=true) rect([r_chunk,r_chunk], rounding=[5,5,5,0]);
     
-    
+    //create belt race_______________________
+    belt_width = 6;
+    w = 3;
+    translate([0,0,-belt_width-r_chunk/2 + w]){
+        beltpath = ellipse(r=r_hw-r_chunk/2-(belt_width-w)/2);
+        path_extrude2d(beltpath,closed=true) 
+        
+        difference(){
+            rect(belt_width+2*w, rounding=[0,0,w,w]);
+            translate([-belt_width/4,0,0])
+            circle(d=belt_width+1);
+            translate([-belt_width*(3/4),0,0])
+            rect(belt_width+1);
+        }
+    } //end belt race     
+}
 }
 
-
 module hw_spoke(r_hw){
-    
+union(){
+    path = helix(h=0,r1=1,r2=25,turns=1.125);
+    rot([0,0,9],cp=([0,25,0]))
+    zrot(45)
+    path_sweep(ellipse(r=[4,2]),path,convexity=4, twist=0);
+
+    translate([4.5,1,0])
+    scale([1,1,.5])
+    sphere(r=4);
+}
+
+//rot([0,0,-9],cp=([0,25,0]))
+//mirror([1,0,0])
+//zrot(45)
+//path_sweep(ellipse(r=[4,2]),path,convexity=4, twist=0);
+
     
 }
 
@@ -63,3 +102,11 @@ module drive_wheel(r_dw){
     
     
 }
+
+function [x,y] = log_spiral(a){
+    //what I would like is a function that takes two points and puts a log spiral through them
+    k = 17.03239 degrees; //= tan(alpha) 
+    x = a*exp(k phi) * cos(phi);
+    y = a*exp(k phi) * sin(phi);
+}
+//https://openscadsnippetpad.blogspot.com/2017/08/log-spiral-function.html
