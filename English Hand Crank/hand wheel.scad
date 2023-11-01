@@ -1,148 +1,133 @@
+// [0,0,0] is defined as centered under the drive wheel on the mounting plate
+//positive y is looking from the drive wheel towards the cloth plate
+//positive x is to the back of the machine/to your right
+
 include <BOSL2/std.scad>
-include <BOSL2/distributors.scad>
-include <ShapesNPaths/crossSections_n_caps.scad>
 
-belt_rad = 3.5;
-res = 100;
+//CONSTANTS____________________________________________
+//bearing info
+id_b = 8;  //id
+od_b = 24; //od
+h_b = 10;  //thickness
 
-belt_channel_rad = 175/2;
-rim_width = 17;
-rim_depth = 12;
+//drive wheel info
+gap_dw = 5; //space between bottom of dw and mounting plate
+r_dw = 25;  //radius of dw
+h_dw = gap_dw+r_dw; //height of center of dw from mounting plate
+t_dw = 10; //distance from center of belt race edge of wheel
 
+//hand wheel info
+gap_hw = 15; //space between bottom of hw and top of dw
+r_hw = 175/2;   //radius of hw
+h_hw = gap_dw + 2*r_dw + gap_hw + r_dw; //height of center of hw from mounting plate
+
+//gantry profile info
+r_maj = 10;
+r_min = 5;
+//it's an ellipse (probably)
+
+//clearance info
+clearance = 10; //space between gantry and wheels
+
+//drive wheel min adjacency
+adj_min = [r_hw + r_maj + clearance, 0, h_dw];
+
+//anchor point (center of screw hole)
+anchor = [0,-(t_dw + clearance),0];
+
+//left & right anchor points (center of screw hole)
+anchor_lr = [r_hw + r_maj + clearance, 0 , 0]; //might need more x
+
+
+//ASSEMBLY_____________________________________________
+zrot_copies(n=3,r=r_hw/2+3)
+zrot(-90)
+hw_spoke(r_hw);
+
+hand_wheel(r_hw);
+rotate([0,180,0])
+hub(id_b,od_b,h_b);
+
+//MODULES______________________________________________
+module hand_wheel(r_hw){
+    union(){
+    //r_hw needs to be the outside extent of the wheel
+    //chunky round wheel with belt race affixed to it
+    r_chunk = 15;
+    path = ellipse(r=r_hw-r_chunk/2);
+    path_extrude2d(path,closed=true) rect([r_chunk,r_chunk], rounding=[5,5,5,0]);
+    
+    //create belt race_______________________
+    belt_width = 6;
+    w = 3;
+    translate([0,0,-belt_width-r_chunk/2 + w]){
+        beltpath = ellipse(r=r_hw-r_chunk/2-(belt_width-w)/2);
+        path_extrude2d(beltpath,closed=true) 
+        
+        difference(){
+            rect(belt_width+2*w, rounding=[0,0,w,w]);
+            translate([-belt_width/4,0,0])
+            circle(d=belt_width+1);
+            translate([-belt_width*(3/4),0,0])
+            rect(belt_width+1);
+        }
+    } //end belt race     
+}
+}
+
+module hw_spoke(r_hw){
+el = [5,3];
+    
+//wide base
+path=ellipse(d=[r_hw-7,r_hw*2/3-7]);
 difference(){
-union(){
-//wheel rim
-rotate_extrude(convexity = 10,$fn=res)
-translate([belt_channel_rad, 0, 0])
-rect([rim_depth,rim_width], rounding=[2,0,2,2]);
-
-//belt channel
-translate([0,0,rim_width/2-1.5])
-rotate_extrude(convexity = 10,$fn=res)
-translate([-belt_channel_rad+0.75, 0, 0])
-belt_channel(belt_rad, res);
-
-
-//bearing superstructure
-rotate_extrude(convexity = 10,$fn=res)
-translate([11, 0, 0])
-cross(10,res);
-
-rotate_extrude(convexity = 10,$fn=res)
-translate([5, 0, 0])
-cross(10,res);
-
-//spokes
-spoke(belt_channel_rad,res);
+    path_sweep(ellipse(r=el),path, convexity=4);
+    translate([-r_hw,0,-5])
+    cube([r_hw*2,r_hw,10]);   
 }
 
-//subtractable regions//
-//bearing
-translate([0,0,4])
-cylinder(h = 8, d = 22, center = true, $fn=res);
+//quarter rounds
+path2 = arc(n=20,r=r_hw/4-7,angle=110);
+translate([r_hw/2-r_hw/4+3.5,0,0])
+path_sweep(ellipse(r=el),path2, convexity=4, twist=0);
 
-//axel shaft/bolt hole
-cylinder(h = 20, d = 9, center = true, $fn=res);
+mirror([1,0,0])
+translate([r_hw/2-r_hw/4+3.5,0,0])
+path_sweep(ellipse(r=el),path2,convexity=4, twist=0);
 
-//hole for hand crank bolt
-translate([0,-belt_channel_rad + 25.5,-2])
-rotate([0,0,90])
-cylinder(h = 8, r = 2, center = true, $fn = res);
+//curly tip
+translate([-20.5,4,0])
+union(){
+path3 = helix(h=0,r1=0,r2=10,l=0, turns=.4);
+zrot(-54)
+path_sweep(ellipse(r=el),path3,convexity=4, twist=0);
 
-//washer hole/clearance
-translate([0,0,-4.5])
-cylinder(h = 2, d = 18, center = true, $fn=res);
+translate([0,0,0])
+scale([1,1,.5])
+sphere(d=10);
 }
 
-
-//Modules//
-
-module spoke(length,res)
-{
-//spokes
+mirror([1,0,0])
+translate([-20.5,4,0])
 union(){
-rotate([90,0,0])
-linear_extrude(length-23, $fn=res)
-cross(10,res);
-    
-rotate([0,0,120])
-rotate([90,0,0])
-linear_extrude(length-23, $fn=res)
-cross(10,res);
-    
-rotate([0,0,-120])
-rotate([90,0,0])
-linear_extrude(length-23, $fn=res)
-cross(10,res);
-    
-//decorative bits
-translate([20,-length+31,0])
-rotate_extrude(angle = -180, convexity = 10,$fn=res)
-translate([20, 0, 0])
-cross(10,res);
-   
-mirror([1,0,0]){    
-translate([20,-length+31,0])
-rotate_extrude(angle = -180, convexity = 10,$fn=res)
-translate([20, 0, 0])
-cross(10,res);  
-}    
-    
-rotate([0,0,120]){
-    translate([20,-length+31,0])
-    rotate_extrude(angle = -180, convexity = 10,$fn=res)
-    translate([20, 0, 0])
-    cross(10,res);
-       
-    mirror([1,0,0]){    
-    translate([20,-length+31,0])
-    rotate_extrude(angle = -180, convexity = 10,$fn=res)
-    translate([20, 0, 0])
-    cross(10,res);      
+path3 = helix(h=0,r1=0,r2=10,l=0, turns=.4);
+zrot(-54)
+path_sweep(ellipse(r=el),path3,convexity=4, twist=0);
+
+translate([0,0,0])
+scale([1,1,.5])
+sphere(d=10);
+}
+}
+
+module hub(id,od,t){
+//module to create hub in gantry    
+    w = 3; //clearances
+
+    difference(){
+        cyl(l=t+w,d=od+10,rounding=2.5);
+        translate([0,0,w])
+        cylinder(h=t,d=od,center=true);   //represent bearing
+        cylinder(h=t*2,d=id+1,center=true); //clear axle
     }
-}    
-
-rotate([0,0,-120]){    
-    translate([20,-length+31,0])
-    rotate_extrude(angle = -180, convexity = 10,$fn=res)
-    translate([20, 0, 0])
-    cross(10,res);
-       
-    mirror([1,0,0]){    
-    translate([20,-length+31,0])
-    rotate_extrude(angle = -180, convexity = 10,$fn=res)
-    translate([20, 0, 0])
-    cross(10,res);      
-    }    
-}
-
-//end caps
-translate([40,-length+31,0])
-rotate([-90,0,0])
-rounded_cross_cap(10,res);
-
-translate([-40,-length+31,0])
-rotate([-90,0,0])
-rounded_cross_cap(10,res);
-    
-rotate([0,0,120]){
-    translate([40,-length+31,0])
-    rotate([-90,0,0])
-    rounded_cross_cap(10,res);}
- 
- rotate([0,0,120]){
-    translate([-40,-length+31,0])
-    rotate([-90,0,0])
-    rounded_cross_cap(10,res);}   
-    
-rotate([0,0,-120]){
-    translate([40,-length+31,0])
-    rotate([-90,0,0])
-    rounded_cross_cap(10,res);} 
-    
-rotate([0,0,-120]){
-    translate([-40,-length+31,0])
-    rotate([-90,0,0])
-    rounded_cross_cap(10,res);} 
-}  
 }
